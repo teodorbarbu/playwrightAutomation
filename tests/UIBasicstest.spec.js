@@ -1,6 +1,6 @@
 const { test, expect } = require("@playwright/test");
 
-test.only("Browser Context Playwright test", async ({ browser }) => {
+test("Browser Context Playwright test", async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
   const userName = page.locator("#username");
@@ -16,7 +16,7 @@ test.only("Browser Context Playwright test", async ({ browser }) => {
   await userName.fill("");
   await userName.fill("rahulshettyacademy");
   //rece condition
-  await Promise.all([await page.waitForNavigation(), await signIn.click()]);
+  await Promise.all([page.waitForNavigation(), signIn.click()]);
 
   //console.log(await cardTitles.first().textContent());
   //console.log(await cardTitles.nth(1).textContent());
@@ -24,8 +24,22 @@ test.only("Browser Context Playwright test", async ({ browser }) => {
   console.log(allTitles);
 });
 
-test("Page Playwrite test", async ({ page }) => {
-  await page.goto("https://google.com");
-  console.log(await page.title());
-  await expect(page).toHaveTitle("Google");
+test.only("UI Controls", async ({ page }) => {
+  await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+  const userName = page.locator("#username");
+  const signIn = page.locator("#signInBtn");
+  const dropdown = page.locator("select.form-control");
+  await dropdown.selectOption("consult");
+  await page.locator(".radiotextsty").last().click();
+  await page.locator("#okayBtn").click();
+
+  //assertion to ckeck user radiobtn is selected
+
+  console.log(await page.locator(".radiotextsty").last().isChecked());
+  await expect(page.locator(".radiotextsty").last()).toBeChecked();
+  await page.locator("#terms").click();
+  await expect(page.locator("#terms")).toBeChecked();
+  await page.locator("#terms").uncheck();
+  expect(await page.locator("#terms").isChecked()).toBeFalsy();
+  //await page.pause();
 });
