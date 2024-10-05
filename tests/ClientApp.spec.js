@@ -57,6 +57,6 @@ test("Browser Context Playwright test", async ({ page }) => {
       break;
     }
   }
-  const orderIdDetails = await page.locator(".col-text").textContent;
+  const orderIdDetails = await page.locator(".col-text").textContent();
   expect(orderId.includes(orderIdDetails)).toBeTruthy();
 });
