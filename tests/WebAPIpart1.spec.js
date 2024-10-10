@@ -1,14 +1,26 @@
 const { test, expect, request } = require("@playwright/test");
+const { APiutils } = require("./utils/APIUtils");
 const loginPayLoad = {
   userEmail: "anshika@gmail.com",
   userPassword: "Iamking@000",
 };
+const orderPayload = {
+  orders: [
+    { country: "United States", productOrderedId: "6581ca399fd99c85e8ee7f45" },
+  ],
+};
 
 let token;
+let orderId;
 
 test.beforeAll(async () => {
+  //login API
   const apiContext = await request.newContext();
-  const loginResponse = await apiContext.post(
+  const apiUtils = new APiutils(apiContext, loginPayLoad);
+  apiUtils.createOrder(orderPayload);
+});
+
+/*const loginResponse = await apiContext.post(
     "https://rahulshettyacademy.com/client/auth/login",
     { data: loginPayLoad }
   );
@@ -16,12 +28,14 @@ test.beforeAll(async () => {
   expect(loginResponse.ok()).toBeTruthy();
   const loginResponseJson = await loginResponse.json();
   token = loginResponseJson.token;
-  console.login(token);
-});
+  console.login(token);*/
+//
 
-test.beforeEach(() => {});
+//test.beforeEach(() => {});
 
 test("WebAPIpart1/Place the order", async ({ page }) => {
+  const apiUtils = new APIUtils(apiContext, loginPayLoad);
+  const orderId = createOrder(orderPayload);
   page.addInitScript((value) => {
     window.localStorage.setItem("token", value);
   }, token);
@@ -30,9 +44,9 @@ test("WebAPIpart1/Place the order", async ({ page }) => {
   //   await page.locator("#userPassword").fill("Iamking@000");
   //   await page.locator("[value='Login']").click();
   //   await page.waitForLoadState("networkidle");
-  const email = "";
-  const productName = "ZARA COAT 3";
   await page.goto("https://rahulshettyacademy.com/client");
+  /*const email = "";
+  const productName = "ZARA COAT 3";
   const products = page.locator(".card-body");
   const titles = await page.locator(".card-body b").allTextContents();
   console.log(titles);
@@ -43,8 +57,8 @@ test("WebAPIpart1/Place the order", async ({ page }) => {
       await products.nth(i).locator("text =  Add To Cart").click();
       break;
     }
-  }
-  await page.locator("[routerlink*='cart']").click();
+  }*/
+  /*await page.locator("[routerlink*='cart']").click();
   await page.locator("div li").first().waitFor(); //wait for the the element to be visible
 
   const bool = await page.locator("h3:has-text('Zara Coat 3')").isVisible();
@@ -71,7 +85,7 @@ test("WebAPIpart1/Place the order", async ({ page }) => {
   const orderId = await page
     .locator(".em-spacer-1 .ng-star-inserted")
     .textContent();
-  console.log(orderId);
+  console.log(orderId);*/
   await page.locator("button[routerlink*='myorders']").click();
   await page.locator("tbody").waitFor();
   const rows = await page.locator("tbody tr");
