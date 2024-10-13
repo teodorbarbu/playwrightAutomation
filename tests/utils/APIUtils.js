@@ -11,24 +11,27 @@ class APIUtils {
 
     //expect(loginResponse.ok()).toBeTruthy();
     const loginResponseJson = await loginResponse.json();
-    token = loginResponseJson.token;
+    const token = loginResponseJson.token;
     console.login(token);
     return token;
   }
-  async createOreder(orderPayload) {
-    const orderResponse = await this.apiContrxt.post(
+  async createOrder(orderPayload) {
+    let response = {};
+    response.token = await this.getToken();
+    const orderResponse = await this.apiContext.post(
       "https://rahulshettyacademy.com/api/ecom/order/create-order",
       {
         data: orderPayload,
         headers: {
-          Autorizarion: this.getToken(),
+          Authorization: response.token,
           "Content-Type": "aplication/json",
         },
       }
     );
     const orderResponseJson = await orderResponse.jason();
-    orderId = orderResponseJson.orders[0];
-    return orderId;
+    const orderId = orderResponseJson.orders[0];
+    response.orderId = orderId;
+    return response;
   }
 }
 module.exports = { APIUtils };
