@@ -1,22 +1,19 @@
 const { test, expect, request } = require("@playwright/test");
 const { APIUtils } = require("./utils/APIUtils");
+
 const loginPayLoad = {
   userEmail: "anshika@gmail.com",
   userPassword: "Iamking@000",
 };
-const orderPayload = {
-  orders: [
-    { country: "United States", productOrderedId: "6581ca399fd99c85e8ee7f45" },
-  ],
+const orderPayLoad = {
+  orders: [{ country: "Cuba", productOrderedId: "6581cade9fd99c85e8ee7ff5" }],
 };
-
-let response;
-
+let response = {};
 test.beforeAll(async () => {
   //login API
   const apiContext = await request.newContext();
   const apiUtils = new APIUtils(apiContext, loginPayLoad);
-  response = await apiUtils.createOrder(orderPayload);
+  response = await apiUtils.createOrder(orderPayLoad);
 });
 
 test("WebAPIpart1/Place the order", async ({ page }) => {

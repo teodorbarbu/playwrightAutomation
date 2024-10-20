@@ -1,3 +1,5 @@
+const { test, expect, request } = require("@playwright/test");
+
 class APIUtils {
   constructor(apiContext, loginPayLoad) {
     this.apiContext = apiContext;
@@ -5,30 +7,35 @@ class APIUtils {
   }
   async getToken() {
     const loginResponse = await this.apiContext.post(
-      "https://rahulshettyacademy.com/client/auth/login",
+      "https://rahulshettyacademy.com/api/ecom/auth/login",
+      //"https://rahulshettyacademy.com/client/dashboard/dash",
+      //"https://rahulshettyacademy.com/client/auth/login",
       { data: this.loginPayLoad }
     );
 
-    //expect(loginResponse.ok()).toBeTruthy();
     const loginResponseJson = await loginResponse.json();
     const token = loginResponseJson.token;
-    console.login(token);
+    //console.log(token);
     return token;
   }
-  async createOrder(orderPayload) {
+  async createOrder(orderPayLoad) {
     let response = {};
     response.token = await this.getToken();
+
     const orderResponse = await this.apiContext.post(
       "https://rahulshettyacademy.com/api/ecom/order/create-order",
+
       {
-        data: orderPayload,
+        data: orderPayLoad,
         headers: {
           Authorization: response.token,
-          "Content-Type": "aplication/json",
+          "Content-Type": "application/json",
         },
       }
     );
-    const orderResponseJson = await orderResponse.jason();
+
+    const orderResponseJson = await orderResponse.json();
+    console.log(orderResponseJson);
     const orderId = orderResponseJson.orders[0];
     response.orderId = orderId;
     return response;
