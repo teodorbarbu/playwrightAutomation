@@ -1,5 +1,6 @@
 const { test, expect, request } = require("@playwright/test");
 const { LoginPage } = require("../pageObjects/LoginPage");
+const { DashboardPage } = require("../pageObjects/DashBoardPage");
 
 test("ClientApp", async ({ page }) => {
   const username = "anshika@gmail.com";
@@ -8,22 +9,12 @@ test("ClientApp", async ({ page }) => {
   const products = page.locator(".card-body");
 
   const loginPage = new LoginPage(page);
-  loginPage.goTo();
-  loginPage.validLogin(username, password);
+  await loginPage.goTo();
+  await loginPage.validLogin(username, password);
+  const dashboardPage = new DashboardPage(page);
+  await dashboardPage.searchProductAddCart(productName);
+  await dashboardPage.navigateToCart();
 
-  await page.waitForLoadState("networkidle");
-  const titles = await page.locator(".card-body b").allTextContents();
-  console.log(titles);
-
-  const count = await products.count();
-  for (let i = 0; i < count; ++i) {
-    if ((await products.nth(i).locator("b").textContent()) === productName) {
-      //add to cart
-      await products.nth(i).locator("text =  Add To Cart").click();
-      break;
-    }
-  }
-  await page.locator("[routerlink*='cart']").click();
   await page.locator("div li").first().waitFor(); //wait for the the element to be visible
 
   const bool = await page.locator("h3:has-text('Zara Coat 3')").isVisible();
