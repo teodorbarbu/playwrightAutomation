@@ -17,7 +17,7 @@ module.exports = defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: 1, //process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -40,9 +40,11 @@ module.exports = defineConfig({
       name: "safari",
       use: {
         browserName: "webkit",
-        headless: true,
+        headless: false,
         screenshot: "off",
+        video: "retain-on-failure",
         trace: "on",
+        ...devices["iPhone 15 Pro Max"],
       },
     },
     {
@@ -51,7 +53,13 @@ module.exports = defineConfig({
         browserName: "chromium",
         headless: false,
         screenshot: "on",
+        //video: "retain-on-failure",
+        ignoreHttpsErrors: true,
+        permissions: ["geolocation"],
         trace: "on",
+
+        //...devices['']
+        //viewport: { width: 720, height: 720 },
       },
     },
   ],
