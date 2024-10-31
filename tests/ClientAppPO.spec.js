@@ -7,7 +7,7 @@ const dataset = JSON.parse(
 );
 
 for (const data of dataset) {
-  test(`ClientApp for ${data.productName}`, async ({ page }) => {
+  test(`@Web ClientApp for ${data.productName}`, async ({ page }) => {
     const poManager = new POManager(page);
     const products = page.locator(".card-body");
     const loginPage = poManager.getLoginPage();
