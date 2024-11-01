@@ -74,7 +74,7 @@ test("ClientApp", async () => {
   expect(orderId.includes(orderIdDetails)).toBeTruthy();
 });
 
-test("Test Case 2", async () => {
+test("@API Test Case 2", async () => {
   const page = await webContext.newPage();
   await page.goto("https://rahulshettyacademy.com/client");
   const products = page.locator(".card-body");
